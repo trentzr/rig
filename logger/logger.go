@@ -57,8 +57,7 @@ func New(options ...loggerOption) *Logger {
 	zerolog.TimeFieldFormat = lo.tsFormat
 
 	lw := zerolog.MultiLevelWriter(lo.outputs...)
-	zl := zerolog.New(lw).Level(getZerologLevel(lo.level)).With().Timestamp().Logger()
-
+	zl := zerolog.New(lw).With().Timestamp().Logger().Level(getZerologLevel(lo.level))
 	return &Logger{
 		Logger: &zl,
 	}
