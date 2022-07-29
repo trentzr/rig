@@ -1,0 +1,2 @@
+# rig
+Microservice rig package
