@@ -1,5 +1,7 @@
 package logger
 
+import "io"
+
 // loggerOption is logger modification func type.
 type loggerOption func(*loggerOptions)
 
@@ -14,5 +16,12 @@ func WithLevel(level Level) loggerOption {
 func WithFormat(format Format) loggerOption {
 	return func(lo *loggerOptions) {
 		lo.format = format
+	}
+}
+
+// WithOutput setup logging output.
+func WithOutput(output io.Writer) loggerOption {
+	return func(lo *loggerOptions) {
+		lo.outputs = append(lo.outputs, output)
 	}
 }
