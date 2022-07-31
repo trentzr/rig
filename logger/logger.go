@@ -1,7 +1,6 @@
 package logger
 
 import (
-	"fmt"
 	"io"
 	"os"
 	"time"
@@ -14,28 +13,20 @@ type (
 	Logger struct {
 		*zerolog.Logger
 	}
-
-	// loggerOptions is logger initial parameters.
-	loggerOptions struct {
-		format   Format
-		level    Level
-		outputs  []io.Writer
-		tsFormat string
-		tsName   string
-	}
 )
 
 // New create logger instance.
-func New(options ...loggerOption) *Logger {
+func New(opts ...option) *Logger {
 
-	lo := loggerOptions{
-		format:   FormatJSON,
-		level:    LevelInfo,
-		outputs:  []io.Writer{os.Stderr},
-		tsFormat: time.RFC3339,
-		tsName:   "timestamp",
+	lo := options{
+		format:    FormatJSON,
+		level:     LevelInfo,
+		outputs:   []io.Writer{os.Stderr},
+		tsEnabled: true,
+		tsFormat:  time.RFC3339,
+		tsName:    "ts",
 	}
-	for _, opt := range options {
+	for _, opt := range opts {
 		opt(&lo)
 	}
 
@@ -54,10 +45,15 @@ func New(options ...loggerOption) *Logger {
 		}
 	}
 
-	zerolog.TimeFieldFormat = lo.tsFormat
-
 	lw := zerolog.MultiLevelWriter(lo.outputs...)
-	zl := zerolog.New(lw).With().Timestamp().Logger().Level(getZerologLevel(lo.level))
+	zl := zerolog.New(lw).Level(getZerologLevel(lo.level))
+
+	if lo.tsEnabled && lo.tsName != "" && lo.tsFormat != "" {
+		zerolog.TimestampFieldName = lo.tsName
+		zerolog.TimeFieldFormat = lo.tsFormat
+		zl = zl.With().Timestamp().Logger()
+	}
+
 	return &Logger{
 		Logger: &zl,
 	}
@@ -111,10 +107,4 @@ func (l *Logger) Errorf(format string, args ...interface{}) {
 // Fatalf implements Fatalf method for logger.
 func (l *Logger) Fatalf(format string, args ...interface{}) {
 	l.Logger.Fatal().Msgf(format, args...)
-}
-
-// WithField implements WithField method for logger.
-func (l *Logger) WithField(key string, value interface{}) *Logger {
-	var outzl = l.Logger.With().Str(key, fmt.Sprint(value)).Logger()
-	return &Logger{Logger: &outzl}
 }
