@@ -70,7 +70,7 @@ func NewNotifier(dsn string, opts ...option) (*Sentry, error) {
 }
 
 // Write implements io.Writer method.
-func (s *Sentry) Write(data []byte) (_ int, _ error) {
+func (s *Sentry) Write(data []byte) (int, error) {
 	return s.WriteLevel(s.zlvl, data)
 }
 
@@ -186,6 +186,7 @@ func (s *Sentry) getStacktrace(msg string) (stacktrace *sentry.Stacktrace) {
 
 		frames = append(frames, frame)
 	}
+
 	stacktrace.Frames = frames
 
 	return stacktrace

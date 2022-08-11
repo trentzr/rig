@@ -44,7 +44,6 @@ func TestField(t *testing.T) {
 	assert.Equal(t, msgStruct.Int, 123)
 	assert.Equal(t, msgStruct.Bool, true)
 	assert.Equal(t, msgStruct.Message, "test message")
-
 }
 
 func TestFields(t *testing.T) {

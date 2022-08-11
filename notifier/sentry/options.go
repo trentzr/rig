@@ -38,13 +38,15 @@ func WithEnvironment(env string) option {
 }
 
 // WithLevel setup logging level (msg with level above it not been logged).
+// Default is error
 func WithLevel(level notifier.Level) option {
 	return func(so *options) {
 		so.level = level
 	}
 }
 
-// WithDebugOutput setup sentry debug output destination // Default is os.Stderr
+// WithDebugOutput setup sentry debug output destination.
+// Default is os.Stderr.
 func WithDebugOutput(output io.Writer) option {
 	return func(so *options) {
 		so.output = output
@@ -59,13 +61,15 @@ func WithRelease(release string) option {
 }
 
 // WithStacktraceEnabled enable stacktrace extraction.
+// Default is disabled.
 func WithStacktraceEnabled(v bool) option {
 	return func(so *options) {
 		so.stacktrace = v
 	}
 }
 
-// WithTimeout setup custom capture flush timeout // Default is 10 sec.
+// WithTimeout setup custom capture flush timeout.
+// Default is 10 sec.
 func WithTimeout(timeout time.Duration) option {
 	return func(so *options) {
 		so.timeout = timeout

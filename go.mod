@@ -3,6 +3,7 @@ module github.com/trentzr/rig
 go 1.18
 
 require (
+	github.com/bsm/redislock v0.7.2
 	github.com/getsentry/sentry-go v0.13.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/rs/zerolog v1.27.0

@@ -24,7 +24,7 @@ func GetString(name, fallback string) string {
 func MustString(name string) string {
 	value := os.Getenv(name)
 	if value != "" {
-		panic(fmt.Errorf("failed to get %s value from env", name))
+		panic(fmt.Errorf("failed to get %q value from ENV", name))
 	}
 	return value
 }
